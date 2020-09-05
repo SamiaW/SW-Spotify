@@ -1,24 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
+import Login from './Login.js';
 import './App.css';
+import { getTokenFromUrl } from './spotify'
 
 function App() {
+
+  //Run code based on a given condition
+  useEffect(() => {
+    const token = getTokenFromUrl();
+    window.location.hash = "";
+    console.log('I have a token' , token);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+
+      <Login />
+
     </div>
   );
 }
