@@ -1,22 +1,82 @@
-import React, { useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import Login from './Login.js';
 import './App.css';
-import { getTokenFromUrl } from './spotify'
+import { getTokenFromUrl } from './spotify';
+import SpotifyWebApi from 'spotify-web-api-js';
+import Player from './Player';
+import { useDataLayerValue } from './DataLayer';
+
+
+const spotify = new SpotifyWebApi();
 
 function App() {
+  // const [token, setToken] = useState(null);
+  const [ appState , dispatch ] = useDataLayerValue();
 
   //Run code based on a given condition
   useEffect(() => {
-    const token = getTokenFromUrl();
-    window.location.hash = "";
-    console.log('I have a token' , token);
-  }, []);
+    const hash = getTokenFromUrl();
+    // window.location.hash = "";
+    const _token = hash.access_token;
+    //console.log(hash);
 
+    if(_token){
+      //setToken(_token);
+      dispatch({
+        type: 'SET_TOKEN',
+        ttoken: _token,
+      })
+
+      spotify.setAccessToken(_token);
+
+      spotify.getMe().then(user => {
+        dispatch( {
+          type: 'SET_USER',
+          user: user,
+        })
+        return user;
+      })
+      .then(user => console.log(user));
+
+
+      // spotify.getUserPlaylists()
+      fetch('https://api.spotify.com/v1/me/playlists', {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + _token,
+        }
+      })
+      .then (response => {
+        if (response.status == "200"){
+          return response.json();
+        }
+      })
+      .then( (playlists) => {
+        dispatch( {
+          type: 'SET_PLAYLISTS',
+          playlist: playlists,
+        })
+        return playlists;
+      })
+      .then (playlist => console.log("hi", playlist))
+      .catch(err => {
+        return "Could not retrieve playlist"
+      });
+
+
+    }
+ }, []);
+  
   return (
-    <div className="app">
-
-      <Login />
-
+    <div className="app"> 
+    { appState.tokennew }
+    { appState.tokennew ? (
+          <Player sspotify={spotify} />
+        ) : (
+          <Login />
+          
+        )        
+      }
     </div>
   );
 }
