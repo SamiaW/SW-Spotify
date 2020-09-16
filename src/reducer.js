@@ -3,7 +3,8 @@ export const initialState = {
     playlists:['ABBA', 'Papa', 'Dada'],
     playing:false,
     item:null,
-    tokennew:null
+    tokennew:null,
+    discover_weekly:null
 };
 
 const reducer = (state, action) => {
@@ -27,6 +28,11 @@ const reducer = (state, action) => {
                 ...state,
                 playlists: action.playlist
 
+            }
+        case 'SET_DISCOVER_WEEKLY':
+            return {
+                ...state,
+                discover_weekly: action.discover_weekly
             }
             
         default:

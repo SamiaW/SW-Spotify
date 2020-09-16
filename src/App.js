@@ -64,12 +64,31 @@ function App() {
       });
 
 
+
+      ////////////////////////// TRACKS
+      fetch( 'https://api.spotify.com/v1/playlists/50KYBMPimWh6X8gxDBAwIJ',{  
+          headers: {
+            "Authorization": "Bearer " + _token,
+          }
+      })
+      .then(response => {
+        if (response.status == 200){
+          return response.json();
+        }
+      })
+      .then(tracks => {
+        dispatch( {
+          type: "SET_DISCOVER_WEEKLY",
+          discover_weekly: tracks,
+        })
+        console.log("&$R$% ", tracks);
+      })
+
     }
  }, []);
   
   return (
     <div className="app"> 
-    { appState.tokennew }
     { appState.tokennew ? (
           <Player sspotify={spotify} />
         ) : (
