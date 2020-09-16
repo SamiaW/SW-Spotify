@@ -10,7 +10,10 @@
 
 export const authEndpoint = "https://accounts.spotify.com/authorize";
 
-const redirectUri = "http://localhost:3000/";
+// const redirectUri = "http://localhost:3000/";
+const redirectUri =  "https://swspotify-41d58.web.app";
+
+
 const clientId = "a0e13b44177343328e1c8dfdb5d252ad";
 
 // Permission assigned to the application 'Spotify Authorization Scopes'
